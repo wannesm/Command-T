@@ -376,6 +376,8 @@ Following is a list of all available options:
   |g:CommandTCtagsOptions|                           string (default: '')
 
       Options to pass on to CTAGS.
+	  For example for LaTeX (only sections, no labels, refs or graphics): >
+	    let g:CommandTCtagsOptions = " --latex-kinds=+s-lrg "
 
 
 

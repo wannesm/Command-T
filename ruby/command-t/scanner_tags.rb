@@ -34,7 +34,9 @@ module CommandT
       @max_depth            = options[:max_depth] || 15
       @max_files            = options[:max_files] || 10_000
       @scan_dot_directories = options[:scan_dot_directories] || false
-      @ctags_options        = options[:ctags_options] || "--fields=nks -u -f - "
+      @ctags_options        = options[:ctags_options] || ""
+	  #@ctags_defoptions     = "--tex-kinds=+s --fields=nks -u -f - "
+	  @ctags_defoptions     = "-u -f - " # unordered and to stdout
       @ctags_cmd            = options[:ctags_cmd] || "ctags"
       @separator            = ">-->"
       @colwidth             = 30
@@ -75,12 +77,15 @@ module CommandT
       if @path == nil || !File.exist?(@path)
         return
       end
-      cmd = @ctags_cmd + ' ' + @ctags_options + ' ' + @path
+      cmd = @ctags_cmd + ' ' + @ctags_defoptions + ' ' + @ctags_options + ' ' + @path
+	  #print cmd
       tags = `#{cmd}`
+	  #print tags
       if tags == nil
         return
       end
       tags.split("\n").each do |tag|
+        #print "tag=#{tag}"
         endfield1 = tag.index("\t")
         field1 = tag[0..endfield1 - 1]
         endfield2 = tag.index("\t", endfield1 + 1)

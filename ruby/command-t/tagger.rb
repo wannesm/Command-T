@@ -31,6 +31,8 @@ module CommandT
   class Tagger
 
     def initialize path = Dir.pwd, options = {}
+      # for tags, starting with a dot doesn't mean 'hidden'
+      options[:always_show_dot_files] = true
       @scanner = ScannerTags.new path, options
       @matcher = Matcher.new @scanner, options
       # default action is not to sort tags, to have a TOC-like view
