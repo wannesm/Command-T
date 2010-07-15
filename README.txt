@@ -235,6 +235,10 @@ COMMANDS                                        *command-t-commands*
                 current working directory as returned by the|:pwd|
                 command.
 
+                                                *:CommandTTags*
+|:CommandTTags| Brings up the Command-T match window, showing the tags
+                in the current buffer.
+
                                                 *:CommandTFlush*
 |:CommandTFlush|Instructs the plug-in to flush its path cache, causing
                 the directory to be rescanned for new or deleted paths
@@ -352,6 +356,25 @@ Following is a list of all available options:
       want the best match (usually the first one) to appear in a fixed location
       on the screen rather than moving as the number of matches changes during
       typing.
+
+                                                        *g:CommandTCtagsCmd*
+  |g:CommandTCtagsCmd|                            string (default: 'ctags')
+
+      Command used to call CTAGS.
+
+                                                       *g:CommandTCtagsSort*
+  |g:CommandTCtagsSort|                                boolean (default: 0)
+
+      Sort the tags. Default is not to sort in order to create a TOC like
+      representation.
+
+                                                    *g:CommandTCtagsOptions*
+  |g:CommandTCtagsOptions|                           string (default: '')
+
+      Options to pass on to CTAGS.
+
+
+
 
 As well as the basic options listed above, there are a number of settings that
 can be used to override the default key mappings used by Command-T. For

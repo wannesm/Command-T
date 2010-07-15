@@ -36,7 +36,7 @@ module CommandT
       @scan_dot_directories = options[:scan_dot_directories] || false
       @ctags_options        = options[:ctags_options] || "--fields=nks -u -f - "
       @ctags_cmd            = options[:ctags_cmd] || "ctags"
-      @separator            = "\t"
+      @separator            = ">-->"
       @colwidth             = 30
     end
 
@@ -65,6 +65,10 @@ module CommandT
       flush
     end
 
+    def separator
+      return @separator
+    end
+
   private
 
     def add_paths_for_directory dir, accumulator
@@ -77,13 +81,14 @@ module CommandT
         return
       end
       tags.split("\n").each do |tag|
-        fields = tag.split("\t")
-        accumulator << fields[0] + " "*(@colwidth - fields[0].length) +  @separator + fields[2]
+        endfield1 = tag.index("\t")
+        field1 = tag[0..endfield1 - 1]
+        endfield2 = tag.index("\t", endfield1 + 1)
+        endfield3 = tag.index("/", endfield2 + 2)
+        field3 = tag[endfield2 + 1..endfield3]
+        width = @colwidth - field1.length
+        accumulator << field1 + " "*(width > 0 ? width : 0) +  @separator + field3
       end
-    end
-
-    def separator
-      return @separator
     end
 
   end # class ScannerTags

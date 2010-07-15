@@ -160,9 +160,9 @@ module CommandT
         :scan_dot_directories   => get_bool('g:CommandTScanDotDirectories')
     end
 
-	def set_up_tagger
-	 @tagger = CommandT::Tagger.new nil,
-	    :max_files              => get_number('g:CommandTMaxFiles'),
+    def set_up_tagger
+     @tagger = CommandT::Tagger.new nil,
+        :max_files              => get_number('g:CommandTMaxFiles'),
         :max_depth              => get_number('g:CommandTMaxDepth'),
         :always_show_dot_files  => get_bool('g:CommandTAlwaysShowDotFiles'),
         :never_show_dot_files   => get_bool('g:CommandTNeverShowDotFiles'),
@@ -170,7 +170,7 @@ module CommandT
         :ctags_sort             => get_bool('g:CommandTCtagsSort'),
         :ctags_options          => get_string('g:CommandTCtagsOptions'),
         :ctags_cmd              => get_string('g:CommandTCtagsCmd')
-	end
+    end
 
     def exists? name
       VIM::evaluate("exists(\"#{name}\")").to_i != 0
@@ -236,7 +236,7 @@ module CommandT
 
     def open_selection selection, options = {}
       if @type == "tags"
-        searchstr = selection.split("\t\t\t\t")[1]
+        searchstr = selection.split(@tagger.separator)[1]
         searchstr.sub!("/^", "/^\\V")
         searchstr.sub!("$/", "\\$/")
         VIM::command "#{searchstr}"
