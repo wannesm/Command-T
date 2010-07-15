@@ -100,18 +100,21 @@ VALUE CommandTMatcher_sorted_matchers_for(VALUE self, VALUE abbrev, VALUE option
 {
     // process optional options hash
     VALUE limit_option = CommandT_option_from_hash("limit", options);
+    VALUE sort_option  = CommandT_option_from_hash("sort", options);
 
     // get unsorted matches
     VALUE matches = CommandTMatcher_matches_for(self, abbrev);
 
     abbrev = StringValue(abbrev);
-    if (RSTRING_LEN(abbrev) == 0 ||
-        (RSTRING_LEN(abbrev) == 1 && RSTRING_PTR(abbrev)[0] == '.'))
-        // alphabetic order if search string is only "" or "."
-        qsort(RARRAY_PTR(matches), RARRAY_LEN(matches), sizeof(VALUE), comp_alpha);
-    else
-        // for all other non-empty search strings, sort by score
-        qsort(RARRAY_PTR(matches), RARRAY_LEN(matches), sizeof(VALUE), comp_score);
+    if (sort_option != Qfalse) {
+        if (RSTRING_LEN(abbrev) == 0 ||
+            (RSTRING_LEN(abbrev) == 1 && RSTRING_PTR(abbrev)[0] == '.'))
+            // alphabetic order if search string is only "" or "."
+            qsort(RARRAY_PTR(matches), RARRAY_LEN(matches), sizeof(VALUE), comp_alpha);
+        else
+            // for all other non-empty search strings, sort by score
+            qsort(RARRAY_PTR(matches), RARRAY_LEN(matches), sizeof(VALUE), comp_score);
+    }
 
     // apply optional limit option
     long limit = NIL_P(limit_option) ? 0 : NUM2LONG(limit_option);

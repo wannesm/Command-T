@@ -22,6 +22,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 require 'command-t/finder'
+require 'command-t/tagger'
 require 'command-t/match_window'
 require 'command-t/prompt'
 
@@ -29,14 +30,22 @@ module CommandT
   class Controller
     def initialize
       @prompt = Prompt.new
+	  @type = 'files'
       set_up_max_height
       set_up_finder
+	  set_up_tagger
     end
 
-    def show
+    def show options = {}
       # optional parameter will be desired starting directory, or ""
-      @path           = File.expand_path(VIM::evaluate('a:arg'), VIM::pwd)
-      @finder.path    = @path
+      @type= options[:type] || 'files'
+      if @type == 'tags'
+        @path           = VIM::Buffer.current.name
+        @tagger.path    = @path
+      else
+        @path           = File.expand_path(VIM::evaluate('a:arg'), VIM::pwd)
+        @finder.path    = @path
+      end
       @initial_window = $curwin
       @initial_buffer = $curbuf
       @match_window   = MatchWindow.new \
@@ -151,6 +160,18 @@ module CommandT
         :scan_dot_directories   => get_bool('g:CommandTScanDotDirectories')
     end
 
+	def set_up_tagger
+	 @tagger = CommandT::Tagger.new nil,
+	    :max_files              => get_number('g:CommandTMaxFiles'),
+        :max_depth              => get_number('g:CommandTMaxDepth'),
+        :always_show_dot_files  => get_bool('g:CommandTAlwaysShowDotFiles'),
+        :never_show_dot_files   => get_bool('g:CommandTNeverShowDotFiles'),
+        :scan_dot_directories   => get_bool('g:CommandTScanDotDirectories'),
+        :ctags_sort             => get_bool('g:CommandTCtagsSort'),
+        :ctags_options          => get_string('g:CommandTCtagsOptions'),
+        :ctags_cmd              => get_string('g:CommandTCtagsCmd')
+	end
+
     def exists? name
       VIM::evaluate("exists(\"#{name}\")").to_i != 0
     end
@@ -214,11 +235,18 @@ module CommandT
     end
 
     def open_selection selection, options = {}
-      command = options[:command] || default_open_command
-      selection = File.expand_path selection, @path
-      selection = sanitize_path_string selection
-      ensure_appropriate_window_selection
-      VIM::command "silent #{command} #{selection}"
+      if @type == "tags"
+        searchstr = selection.split("\t\t\t\t")[1]
+        searchstr.sub!("/^", "/^\\V")
+        searchstr.sub!("$/", "\\$/")
+        VIM::command "#{searchstr}"
+      else
+        command = options[:command] || default_open_command
+        selection = File.expand_path selection, @path
+        selection = sanitize_path_string selection
+        ensure_appropriate_window_selection
+        VIM::command "silent #{command} #{selection}"
+      end
     end
 
     def map key, function, param = nil
@@ -282,7 +310,11 @@ module CommandT
     end
 
     def list_matches
-      matches = @finder.sorted_matches_for @prompt.abbrev, :limit => match_limit
+      if @type == 'files'
+        matches = @finder.sorted_matches_for @prompt.abbrev, :limit => match_limit
+      else
+        matches = @tagger.sorted_matches_for @prompt.abbrev, :limit => match_limit
+      end
       @match_window.matches = matches
     end
   end # class Controller

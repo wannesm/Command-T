@@ -28,13 +28,25 @@ endif
 let g:command_t_loaded = 1
 
 command -nargs=? -complete=dir CommandT call <SID>CommandTShow(<q-args>)
+command -nargs=? CommandTTags call <SID>CommandTShowTags(<q-args>)
 command CommandTFlush call <SID>CommandTFlush()
 
 silent! nmap <unique> <silent> <Leader>t :CommandT<CR>
 
+if !exists('g:CommandTCtagsCmd')
+  let g:CommandTCtagsCmd = 'ctags'
+endif
+
 function s:CommandTRubyWarning()
   echohl WarningMsg
   echo "command-t.vim requires Vim to be compiled with Ruby support"
+  echo "For more information type:  :help command-t"
+  echohl none
+endfunction
+
+function s:CommandTCtagsWarning()
+  echohl WarningMsg
+  echo "command-t.vim requires the ctags binary"
   echo "For more information type:  :help command-t"
   echohl none
 endfunction
@@ -44,6 +56,18 @@ function s:CommandTShow(arg)
     ruby $command_t.show
   else
     call s:CommandTRubyWarning()
+  endif
+endfunction
+
+function s:CommandTShowTags(arg)
+  if !executable(g:CommandTCtagsCmd)
+    call s:CommandTCtagsWarning()
+  else
+    if has('ruby')
+      ruby $command_t.show :type => 'tags'
+    else
+      call s:CommandTRubyWarning()
+    endif
   endif
 endfunction
 
