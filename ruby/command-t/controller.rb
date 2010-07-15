@@ -240,7 +240,7 @@ module CommandT
         searchstr = selection.split(@tagger.separator)[1]
         searchstr.sub!("/^", "/^\\V")
         searchstr.sub!("$/", "\\$/")
-        VIM::command "#{searchstr}"
+        VIM::command "silent #{searchstr}"
       else
         command = options[:command] || default_open_command
         selection = File.expand_path selection, @path
