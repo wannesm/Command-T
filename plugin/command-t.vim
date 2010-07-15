@@ -32,6 +32,7 @@ command -nargs=? CommandTTags call <SID>CommandTShowTags(<q-args>)
 command CommandTFlush call <SID>CommandTFlush()
 
 silent! nmap <unique> <silent> <Leader>t :CommandT<CR>
+silent! nmap <unique> <silent> <Leader>tt :CommandTTags<CR>
 
 if !exists('g:CommandTCtagsCmd')
   let g:CommandTCtagsCmd = 'ctags'

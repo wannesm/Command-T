@@ -153,11 +153,15 @@ Bring up the Command-T match window by typing:
 
   <Leader>t
 
+(Or <Leader>tt for tags instead of files)
+
 If a mapping for <Leader>t already exists at the time the plug-in is loaded
 then Command-T will not overwrite it. You can instead open the match window by
 issuing the command:
 
   :CommandT
+
+(Or |:CommandTTags| for tags instead of files)
 
 A prompt will appear at the bottom of the screen along with a match window
 showing all of the files in the current directory (as returned by the
@@ -237,7 +241,7 @@ COMMANDS                                        *command-t-commands*
 
                                                 *:CommandTTags*
 |:CommandTTags| Brings up the Command-T match window, showing the tags
-                in the current buffer.
+                in the current buffer according to ctags.
 
                                                 *:CommandTFlush*
 |:CommandTFlush|Instructs the plug-in to flush its path cache, causing
