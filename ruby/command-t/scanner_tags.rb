@@ -39,7 +39,7 @@ module CommandT
 	  @ctags_defoptions     = "-u -f - " # unordered and to stdout
       @ctags_cmd            = options[:ctags_cmd] || "ctags"
       @separator            = ">-->"
-      @colwidth             = 30
+      @colwidth             = options[:ctags_colwidth] || 60
     end
 
     def paths

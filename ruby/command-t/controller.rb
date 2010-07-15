@@ -169,7 +169,8 @@ module CommandT
         :scan_dot_directories   => get_bool('g:CommandTScanDotDirectories'),
         :ctags_sort             => get_bool('g:CommandTCtagsSort'),
         :ctags_options          => get_string('g:CommandTCtagsOptions'),
-        :ctags_cmd              => get_string('g:CommandTCtagsCmd')
+        :ctags_cmd              => get_string('g:CommandTCtagsCmd'),
+        :ctags_colwidth         => get_string('g:CommandTCtagsColWidth')
     end
 
     def exists? name
