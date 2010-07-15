@@ -72,7 +72,7 @@ function CommandTDelete()
 endfunction
 
 function CommandTAcceptSelection()
-  ruby $command_t.accept_selection
+  ruby $command_t.accept_selection :command => 'drop'
 endfunction
 
 function CommandTAcceptSelectionTab()
