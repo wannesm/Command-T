@@ -152,12 +152,12 @@ ruby << EOF
   # require Ruby files
   begin
     # prepare controller
-    require 'vim'
+    require 'command-t/vim'
     require 'command-t/controller'
     $command_t = CommandT::Controller.new
   rescue LoadError
     load_path_modified = false
-    VIM::evaluate('&runtimepath').to_s.split(',').each do |path|
+    ::VIM::evaluate('&runtimepath').to_s.split(',').each do |path|
       lib = "#{path}/ruby"
       if !$LOAD_PATH.include?(lib) and File.exist?(lib)
         $LOAD_PATH << lib

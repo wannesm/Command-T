@@ -43,7 +43,7 @@ module CommandT
         @path           = VIM::Buffer.current.name
         @tagger.path    = @path
       else
-        @path           = File.expand_path(VIM::evaluate('a:arg'), VIM::pwd)
+        @path           = File.expand_path(::VIM::evaluate('a:arg'), VIM::pwd)
         @finder.path    = @path
       end
       @initial_window = $curwin
@@ -62,8 +62,8 @@ module CommandT
 
     def hide
       @match_window.close
-      if @initial_window.select
-        VIM::command "silent b #{@initial_buffer.number}"
+      if VIM::Window.select @initial_window
+        ::VIM::command "silent b #{@initial_buffer.number}"
       end
     end
 
@@ -73,7 +73,7 @@ module CommandT
     end
 
     def handle_key
-      key = VIM::evaluate('a:arg').to_i.chr
+      key = ::VIM::evaluate('a:arg').to_i.chr
       if @focus == @prompt
         @prompt.add! key
         list_matches
@@ -174,25 +174,25 @@ module CommandT
     end
 
     def exists? name
-      VIM::evaluate("exists(\"#{name}\")").to_i != 0
+      ::VIM::evaluate("exists(\"#{name}\")").to_i != 0
     end
 
     def get_number name
-      exists?(name) ? VIM::evaluate("#{name}").to_i : nil
+      exists?(name) ? ::VIM::evaluate("#{name}").to_i : nil
     end
 
     def get_bool name
-      exists?(name) ? VIM::evaluate("#{name}").to_i != 0 : nil
+      exists?(name) ? ::VIM::evaluate("#{name}").to_i != 0 : nil
     end
 
     def get_string name
-      exists?(name) ? VIM::evaluate("#{name}").to_s : nil
+      exists?(name) ? ::VIM::evaluate("#{name}").to_s : nil
     end
 
     # expect a string or a list of strings
     def get_list_or_string name
       return nil unless exists?(name)
-      list_or_string = VIM::evaluate("#{name}")
+      list_or_string = ::VIM::evaluate("#{name}")
       if list_or_string.kind_of?(Array)
         list_or_string.map { |item| item.to_s }
       else
@@ -228,9 +228,9 @@ module CommandT
       # normally.
       initial = $curwin
       while true do
-        break unless VIM::evaluate('&buflisted').to_i == 0 &&
-          VIM::evaluate('&buftype').to_s == 'nofile'
-        VIM::command 'wincmd w'     # try next window
+        break unless ::VIM::evaluate('&buflisted').to_i == 0 &&
+          ::VIM::evaluate('&buftype').to_s == 'nofile'
+        ::VIM::command 'wincmd w'     # try next window
         break if $curwin == initial # have already tried all
       end
     end
@@ -246,21 +246,21 @@ module CommandT
         selection = File.expand_path selection, @path
         selection = sanitize_path_string selection
         ensure_appropriate_window_selection
-        VIM::command "silent #{command} #{selection}"
+        ::VIM::command "silent #{command} #{selection}"
       end
     end
 
     def map key, function, param = nil
-      VIM::command "noremap <silent> <buffer> #{key} " \
+      ::VIM::command "noremap <silent> <buffer> #{key} " \
         ":call CommandT#{function}(#{param})<CR>"
     end
 
     def xterm?
-      !!(VIM::evaluate('&term') =~ /\Axterm/)
+      !!(::VIM::evaluate('&term') =~ /\Axterm/)
     end
 
     def vt100?
-      !!(VIM::evaluate('&term') =~ /\Avt100/)
+      !!(::VIM::evaluate('&term') =~ /\Avt100/)
     end
 
     def register_for_key_presses
