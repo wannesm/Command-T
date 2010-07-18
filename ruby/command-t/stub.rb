@@ -27,7 +27,7 @@ module CommandT
                     'Please see INSTALLATION and TROUBLE-SHOOTING in the help',
                     'For more information type:    :help command-t']
 
-    def show
+    def show options = {}
       warn *@@load_error
     end
 

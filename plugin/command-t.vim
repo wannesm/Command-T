@@ -157,11 +157,18 @@ ruby << EOF
     $command_t = CommandT::Controller.new
   rescue LoadError
     load_path_modified = false
-    ::VIM::evaluate('&runtimepath').to_s.split(',').each do |path|
-      lib = "#{path}/ruby"
-      if !$LOAD_PATH.include?(lib) and File.exist?(lib)
-        $LOAD_PATH << lib
-        load_path_modified = true
+    cmdt_path = ::VIM::evaluate("expand('<sfile>:h:h')") + "/ruby/command-t/"
+    if !$LOAD_PATH.include?(cmdt_path) and File.exist?(cmdt_path)
+      # Add path to command-t ruby directory
+      $LOAD_PATH<< cmdt_path
+      load_path_modified = true
+    else
+      ::VIM::evaluate('&runtimepath').to_s.split(',').each do |path|
+        lib = "#{path}/ruby"
+        if !$LOAD_PATH.include?(lib) and File.exist?(lib)
+          $LOAD_PATH << lib
+          load_path_modified = true
+        end
       end
     end
     retry if load_path_modified
@@ -172,3 +179,4 @@ ruby << EOF
     $command_t = CommandT::Stub.new
   end
 EOF
+
