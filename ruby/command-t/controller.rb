@@ -40,7 +40,7 @@ module CommandT
       # optional parameter will be desired starting directory, or ""
       @type= options[:type] || 'files'
       if @type == 'tags'
-        @path           = VIM::Buffer.current.name
+        @path           = ::VIM::Buffer.current.name
         @tagger.path    = @path
       else
         @path           = File.expand_path(::VIM::evaluate('a:arg'), VIM::pwd)
@@ -240,7 +240,7 @@ module CommandT
         searchstr = selection.split(@tagger.separator)[1]
         searchstr.sub!("/^", "/^\\V")
         searchstr.sub!("$/", "\\$/")
-        VIM::command "silent #{searchstr}"
+        ::VIM::command "silent #{searchstr}"
       else
         command = options[:command] || default_open_command
         selection = File.expand_path selection, @path
