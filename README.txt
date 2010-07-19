@@ -153,7 +153,7 @@ Bring up the Command-T match window by typing:
 
   <Leader>t
 
-(Or <Leader>tt for tags instead of files)
+(Or <Leader>T for tags instead of files)
 
 If a mapping for <Leader>t already exists at the time the plug-in is loaded
 then Command-T will not overwrite it. You can instead open the match window by
@@ -364,7 +364,10 @@ Following is a list of all available options:
                                                         *g:CommandTCtagsCmd*
   |g:CommandTCtagsCmd|                            string (default: 'ctags')
 
-      Command used to call CTAGS.
+      Command used to call Ctags. For example, if Ctags is installed by
+      means of Macports you can use
+        let g:CommandTCtagsCmd = "/opt/local/bin/ctags"
+
 
                                                        *g:CommandTCtagsSort*
   |g:CommandTCtagsSort|                                boolean (default: 0)
@@ -376,8 +379,8 @@ Following is a list of all available options:
   |g:CommandTCtagsOptions|                           string (default: '')
 
       Options to pass on to CTAGS.
-	  For example for LaTeX (only sections, no labels, refs or graphics): >
-	    let g:CommandTCtagsOptions = " --latex-kinds=+s-lrg "
+      For example for LaTeX (only sections, no labels, refs or graphics): >
+        let g:CommandTCtagsOptions = " --latex-kinds=+s-lrg "
 
 
 

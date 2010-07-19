@@ -25,7 +25,7 @@ require 'vim'
 require 'Open3'
 
 module CommandT
-  # Reads the current directory recursively for the paths to all regular files.
+  # Calls ctags for the current file.
   class ScannerTags
     class FileLimitExceeded < ::RuntimeError; end
 
