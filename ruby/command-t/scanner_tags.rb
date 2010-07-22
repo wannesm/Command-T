@@ -77,7 +77,7 @@ module CommandT
       if @path == nil || !File.exist?(@path)
         return
       end
-      cmd = @ctags_cmd + ' ' + @ctags_defoptions + ' ' + @ctags_options + ' ' + @path
+      cmd = @ctags_cmd + ' ' + @ctags_defoptions + ' ' + @ctags_options + ' ' + @path + '2> /tmp/cmdt_ctags.log'
 	  #print cmd
       tags = `#{cmd}`
 	  #print tags
