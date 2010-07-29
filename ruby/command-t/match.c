@@ -31,7 +31,7 @@ typedef struct
 {
     char    *str_p;                 // pointer to string to be searched
     long    str_len;                // length of same
-    char    *str_sep;               // separator, don't search after this char
+    /*char    *str_sep;               // separator, don't search after this char*/
     char    *abbrev_p;              // pointer to search string (abbreviation)
     long    abbrev_len;             // length of same
     double  max_score_per_char;
@@ -58,8 +58,8 @@ double recursive_match(matchinfo_t *m,  // sharable meta-data
         int found = 0;
         for (long j = str_idx; j < m->str_len; j++, str_idx++)
         {
-            if (&m->str_p[j] == m->str_sep)
-                break;
+            /*if (&m->str_p[j] == m->str_sep)*/
+                /*break;*/
             char d = m->str_p[j];
             if (d == '.')
             {
@@ -147,7 +147,7 @@ VALUE CommandTMatch_initialize(int argc, VALUE *argv, VALUE self)
     matchinfo_t m;
     m.str_p                 = RSTRING_PTR(str);
     m.str_len               = RSTRING_LEN(str);
-    m.str_sep               = strstr(m.str_p, ">-->");
+    /*m.str_sep               = strstr(m.str_p, ">-->");*/
     m.abbrev_p              = RSTRING_PTR(abbrev);
     m.abbrev_len            = RSTRING_LEN(abbrev);
     m.max_score_per_char    = (1.0 / m.str_len + 1.0 / m.abbrev_len) / 2;
