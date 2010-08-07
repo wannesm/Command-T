@@ -51,7 +51,7 @@ module CommandT
     end
 
     def tagline
-	    File.open("/Users/wannes/Desktop/tmp/cmdt.log", 'a') {|f| f.write("tagger:tagline=#{@scanner.tagline}\n") }
+		#File.open("/Users/wannes/Desktop/tmp/cmdt.log", 'a') {|f| f.write("tagger:tagline=#{@scanner.tagline}\n") }
         return @scanner.tagline
     end
 

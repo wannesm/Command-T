@@ -56,7 +56,7 @@ module CommandT
       @prompt.focus
       register_for_key_presses
       clear # clears prompt and list matches
-	  File.open("/Users/wannes/Desktop/tmp/cmdt.log", 'a') {|f| f.write("controller:tagline=#{@tagger.tagline}") }
+	  #File.open("/Users/wannes/Desktop/tmp/cmdt.log", 'a') {|f| f.write("controller:tagline=#{@tagger.tagline}") }
       if @type == 'tags' and @tagger.tagline != 0
         @match_window.select_line = @tagger.tagline
       end

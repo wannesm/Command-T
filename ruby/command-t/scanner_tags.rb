@@ -45,7 +45,7 @@ module CommandT
     end
 
     def tagline
-	  File.open("/Users/wannes/Desktop/tmp/cmdt.log", 'a') {|f| f.write("scanner:tagline=#{@tagline}\n") }
+	  #File.open("/Users/wannes/Desktop/tmp/cmdt.log", 'a') {|f| f.write("scanner:tagline=#{@tagline}\n") }
       return @tagline
     end
 
@@ -116,7 +116,7 @@ module CommandT
         accumulator << field1 + " "*(width > 0 ? width : 0) +  @separator + field3
       end
       @tagline = @tagline - 1
-	  File.open("/Users/wannes/Desktop/tmp/cmdt.log", 'a') {|f| f.write("scanner:addpaths:tagline=#{@tagline}\n") }
+	  #File.open("/Users/wannes/Desktop/tmp/cmdt.log", 'a') {|f| f.write("scanner:addpaths:tagline=#{@tagline}\n") }
     end
 
   end # class ScannerTags
