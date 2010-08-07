@@ -108,7 +108,7 @@ module CommandT
         #print tag
         #print "bfl = #{beginfieldline}, efl = #{endfieldline}"
         #print "number="+tag[beginfieldline + 1..endfieldline]
-        if tag[beginfieldline + 1..endfieldline].to_i < @curline
+        if tag[beginfieldline + 1..endfieldline].to_i <= @curline
           @tagline = @tagline + 1
         end
         width = @colwidth - field1.length
