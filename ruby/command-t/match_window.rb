@@ -114,7 +114,7 @@ module CommandT
     end
 
     def select_line= line
-      if line < @matches.length
+      if line > 0 and line < @matches.length
         old_selection = @selection
         @selection = line
         print_match(old_selection) # redraw old selection (removes marker)
