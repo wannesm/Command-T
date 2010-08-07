@@ -241,7 +241,8 @@ COMMANDS                                        *command-t-commands*
 
                                                 *:CommandTTags*
 |:CommandTTags| Brings up the Command-T match window, showing the tags
-                in the current buffer according to ctags.
+                in the current buffer according to ctags. The tag right in
+                from of the current line is selected in the list of tags.
 
                                                 *:CommandTFlush*
 |:CommandTFlush|Instructs the plug-in to flush its path cache, causing

@@ -94,6 +94,7 @@ module CommandT
       @abbrev     = ''
       @window     = $curwin
       @buffer     = $curbuf
+
     end
 
     def close
@@ -110,6 +111,17 @@ module CommandT
 
     def backspace!
       @abbrev.chop!
+    end
+
+    def select_line= line
+      if line < @matches.length
+        old_selection = @selection
+        @selection = line
+        print_match(old_selection) # redraw old selection (removes marker)
+        print_match(@selection)     # redraw new selection (adds marker)
+      else
+        # (possibly) loop or scroll
+      end
     end
 
     def select_next

@@ -36,10 +36,21 @@ module CommandT
       @scan_dot_directories = options[:scan_dot_directories] || false
       @ctags_options        = options[:ctags_options] || ""
 	  #@ctags_defoptions     = "--tex-kinds=+s --fields=nks -u -f - "
-	  @ctags_defoptions     = "-u -f - " # unordered and to stdout
+	  @ctags_defoptions     = "-u -f - --fields=+n " # unordered and to stdout
       @ctags_cmd            = options[:ctags_cmd] || "ctags"
       @separator            = ">-->"
       @colwidth             = options[:ctags_colwidth] || 60
+	  @tagline              = 0
+	  @curline              = 0
+    end
+
+    def tagline
+	  File.open("/Users/wannes/Desktop/tmp/cmdt.log", 'a') {|f| f.write("scanner:tagline=#{@tagline}\n") }
+      return @tagline
+    end
+
+    def line= line
+        @curline = line
     end
 
     def paths
@@ -77,10 +88,11 @@ module CommandT
       if @path == nil || !File.exist?(@path)
         return
       end
+      @tagline = 0
       cmd = @ctags_cmd + ' ' + @ctags_defoptions + ' ' + @ctags_options + ' ' + @path + ' 2> /tmp/cmdt_ctags.log'
-	  #print cmd
+      #print cmd
       tags = `#{cmd}`
-	  #print tags
+      #print tags
       if tags == nil
         return
       end
@@ -89,11 +101,22 @@ module CommandT
         endfield1 = tag.index("\t")
         field1 = tag[0..endfield1 - 1]
         endfield2 = tag.index("\t", endfield1 + 1)
-        endfield3 = tag.index("/", endfield2 + 2)
+        endfield3 = tag.index("/;\"", endfield2 + 2)
         field3 = tag[endfield2 + 1..endfield3]
+        beginfieldline = tag.index("line:", endfield3) + 4
+        endfieldline = tag.index(/\t|$/, beginfieldline)
+        #print tag
+        #print "bfl = #{beginfieldline}, efl = #{endfieldline}"
+        #print "number="+tag[beginfieldline + 1..endfieldline]
+        if tag[beginfieldline + 1..endfieldline].to_i < @curline
+          @tagline = @tagline + 1
+        end
         width = @colwidth - field1.length
+		#print "tagline = #{@tagline}, curline = #{@curline}, tagcurline = #{tag[beginfieldline + 1..endfieldline].to_i}"
         accumulator << field1 + " "*(width > 0 ? width : 0) +  @separator + field3
       end
+      @tagline = @tagline - 1
+	  File.open("/Users/wannes/Desktop/tmp/cmdt.log", 'a') {|f| f.write("scanner:addpaths:tagline=#{@tagline}\n") }
     end
 
   end # class ScannerTags

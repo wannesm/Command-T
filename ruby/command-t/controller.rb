@@ -41,6 +41,7 @@ module CommandT
       @type= options[:type] || 'files'
       if @type == 'tags'
         @path           = ::VIM::Buffer.current.name
+        @tagger.line    = ::VIM::Buffer.current.line_number
         @tagger.path    = @path
       else
         @path           = File.expand_path(::VIM::evaluate('a:arg'), VIM::pwd)
@@ -55,6 +56,10 @@ module CommandT
       @prompt.focus
       register_for_key_presses
       clear # clears prompt and list matches
+	  File.open("/Users/wannes/Desktop/tmp/cmdt.log", 'a') {|f| f.write("controller:tagline=#{@tagger.tagline}") }
+      if @type == 'tags' and @tagger.tagline != 0
+        @match_window.select_line = @tagger.tagline
+      end
     rescue Errno::ENOENT
       # probably a problem with the optional parameter
       @match_window.print_no_such_file_or_directory

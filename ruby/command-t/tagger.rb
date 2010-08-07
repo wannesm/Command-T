@@ -46,6 +46,15 @@ module CommandT
       @matcher.sorted_matches_for str, options
     end
 
+    def line= line
+        @scanner.line = line
+    end
+
+    def tagline
+	    File.open("/Users/wannes/Desktop/tmp/cmdt.log", 'a') {|f| f.write("tagger:tagline=#{@scanner.tagline}\n") }
+        return @scanner.tagline
+    end
+
     def flush
       @scanner.flush
     end
