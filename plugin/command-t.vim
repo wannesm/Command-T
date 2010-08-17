@@ -31,7 +31,9 @@ command -nargs=? -complete=dir CommandT call <SID>CommandTShow(<q-args>)
 command -nargs=? CommandTTags call <SID>CommandTShowTags(<q-args>)
 command CommandTFlush call <SID>CommandTFlush()
 
-silent! nmap <unique> <silent> <Leader>t :CommandT<CR>
+if !hasmapto('CommandT')
+  silent! nmap <unique> <silent> <Leader>t :CommandT<CR>
+endif
 silent! nmap <unique> <silent> <Leader>T :CommandTTags<CR>
 
 if !exists('g:CommandTCtagsCmd')
