@@ -97,11 +97,12 @@ module CommandT
         return
       end
       tags.split("\n").each do |tag|
+        # Ctags output format: tag_name<TAB>file_name<TAB>ex_cmd;"<TAB>extension_fields
         #print "tag=#{tag}"
         endfield1 = tag.index("\t")
         field1 = tag[0..endfield1 - 1]
         endfield2 = tag.index("\t", endfield1 + 1)
-        endfield3 = tag.index("/;\"", endfield2 + 2)
+        endfield3 = tag.index(";\"", endfield2 + 2)
         field3 = tag[endfield2 + 1..endfield3]
         beginfieldline = tag.index("line:", endfield3) + 4
         endfieldline = tag.index(/\t|$/, beginfieldline)
