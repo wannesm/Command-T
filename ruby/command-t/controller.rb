@@ -55,7 +55,7 @@ module CommandT
       @focus          = @prompt
       @prompt.focus
       register_for_key_presses
-      clear # clears prompt and list matches
+      clear # clears prompt and lists matches
 	  #File.open("/Users/wannes/Desktop/tmp/cmdt.log", 'a') {|f| f.write("controller:tagline=#{@tagger.tagline}") }
       if @type == 'tags' and @tagger.tagline != 0
         @match_window.select_line = @tagger.tagline
@@ -109,11 +109,7 @@ module CommandT
 
     def toggle_focus
       @focus.unfocus # old focus
-      if @focus == @prompt
-        @focus = @match_window
-      else
-        @focus = @prompt
-      end
+      @focus = @focus == @prompt ? @match_window : @prompt
       @focus.focus # new focus
     end
 
@@ -205,6 +201,12 @@ module CommandT
       end
     end
 
+    def relative_path_under_working_directory path
+      # any path under the working directory will be specified as a relative
+      # path to improve the readability of the buffer list etc
+      path.index(pwd = "#{VIM::pwd}/") == 0 ? path[pwd.length..-1] : path
+    end
+
     # Backslash-escape space, \, |, %, #, "
     def sanitize_path_string str
       # for details on escaping command-line mode arguments see: :h :
@@ -249,6 +251,7 @@ module CommandT
       else
         command = options[:command] || default_open_command
         selection = File.expand_path selection, @path
+        selection = relative_path_under_working_directory selection
         selection = sanitize_path_string selection
         ensure_appropriate_window_selection
         ::VIM::command "silent #{command} #{selection}"
